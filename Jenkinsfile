@@ -16,7 +16,7 @@ pipeline {
                 '''
             }
         }
-    stage('Push to Docker Hub') {
+        stage('Push to Docker Hub') {
             agent { label 'ubuntu-slave-node' }
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
@@ -24,7 +24,7 @@ pipeline {
                 }
             }
         }
-    stage('Deploy to Development') {
+        stage('Deploy to Development') {
             agent { label 'ubuntu-slave-node' }
             steps {
                 echo "Deploying to Development environment using Docker Compose"
@@ -34,6 +34,18 @@ pipeline {
                 '''
             }
         }
+        stage('Deploy to production environment') {
+            agent{ label 'ubuntu-slave-node' }
+            steps { 
+                timeout(time: 5, unit: 'MINUTES') {
+                input message: 'Approve PRODUCTION Deployment?'
+                }
+                echo "Deploying to Production environment"
+                sh '''
+                    docker compose -f docker-compose.yml down || true
+                    docker compose -f docker-compose.yml up --build -d
+                '''
+            }
+        }  
+    }
 }
-}
-
