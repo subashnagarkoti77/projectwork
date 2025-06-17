@@ -25,7 +25,8 @@ pipeline {
                 }
             }
         }
-post {
+}
+     post {
         always {
             mail to: 'subnag77@gmail.com',
                  subject: "Job '${JOB_NAME}' (#${BUILD_NUMBER}) Status",
@@ -45,4 +46,4 @@ post {
         }
     }
 }
-}
+
