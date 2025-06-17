@@ -8,44 +8,40 @@ pipeline {
 
     stages {
         stage('Build Image') {
-            agent { label 'ubuntu-slave-node' }
             steps {
                 echo "Building image using Docker Compose"
                 sh '''
-                    docker tag ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
+                whoami
+                COMPOSE_BAKE=true ||
+                docker compose -f docker-compose.yml build    
+                docker tag ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
                 '''
             }
         }
         stage('Push to Docker Hub') {
-            agent { label 'ubuntu-slave-node' }
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
                     sh "docker push $dockerImage:$BUILD_NUMBER"
                 }
             }
         }
-        stage('Deploy to Development') {
-            agent { label 'ubuntu-slave-node' }
-            steps {
-                echo "Deploying to Development environment using Docker Compose"
-                sh '''
-                    docker compose -f docker-compose.yml down || true
-                    docker compose -f docker-compose.yml up -d
-                '''
-            }
+post {
+        always {
+            mail to: 'subnag77@gmail.com',
+                 subject: "Job '${JOB_NAME}' (#${BUILD_NUMBER}) Status",
+                 body: "Visit ${BUILD_URL} to view details."
         }
-        stage('Deploy to production environment') {
-            agent{ label 'ubuntu-slave-node' }
-            steps { 
-                timeout(time: 5, unit: 'MINUTES') {
-                input message: 'Approve PRODUCTION Deployment?'
-                }
-                echo "Deploying to Production environment"
-                sh '''
-                    docker compose -f docker-compose.yml down || true
-                    docker compose -f docker-compose.yml up --build -d
-                '''
-            }
-        }  
+
+        success {
+            mail to: 'subnag77@gmail.com',
+                 subject: "✅ BUILD SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
+                 body: "Build #${BUILD_NUMBER} succeeded.\nCheck: ${BUILD_URL}"
+        }
+
+        failure {
+            mail to: 'subnag77@gmail.com',
+                 subject: "❌ BUILD FAILED: ${JOB_NAME} #${BUILD_NUMBER}",
+                 body: "Build #${BUILD_NUMBER} failed.\nCheck: ${BUILD_URL}"
+        }
     }
 }
