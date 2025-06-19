@@ -21,7 +21,10 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
-                    sh "/usr/bin/docker compose push ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER"
+                    sh '''
+                    /usr/bin/docker compose push ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
+                    /usr/bin/docker compose push ${COMPOSE_PROJECT_NAME}-db:latest $dockerImage:$BUILD_NUMBER
+                    '''
                 }
             }
         }
