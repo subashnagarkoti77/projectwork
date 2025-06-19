@@ -13,7 +13,7 @@ pipeline {
                 sh '''
                 whoami
                 export COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
-                /usr/bin/docker compose -f docker-compose.yml build    
+                docker compose -f docker-compose.yml build    
                 docker tag ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
                 '''
             }
@@ -22,8 +22,7 @@ pipeline {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
                     sh '''
-                    /usr/bin/docker compose push ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
-                    /usr/bin/docker compose push ${COMPOSE_PROJECT_NAME}-db:latest $dockerImage:$BUILD_NUMBER
+                    docker push ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
                     '''
                 }
             }
