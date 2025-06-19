@@ -22,7 +22,7 @@ pipeline {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
                     sh '''
-                    docker compose push ${COMPOSE_PROJECT_NAME}-web:latest
+                    docker push $dockerImage:$BUILD_NUMBER
                     '''
                 }
             }
