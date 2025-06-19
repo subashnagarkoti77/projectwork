@@ -12,6 +12,8 @@ pipeline {
                 echo "Building image using Docker Compose"
                 sh '''
                 whoami
+                which docker 
+                which docker compose
                 export COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
                 docker compose -f docker-compose.yml build    
                 docker tag ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
