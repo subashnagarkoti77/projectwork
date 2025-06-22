@@ -8,12 +8,8 @@ pipeline {
         dockerImage = "subashn77/bookmanagement"
         COMPOSE_PROJECT_NAME = "bookmgmt"
     }
-  tools {
-        SonarRunnerInstallation 'sonar-scanner' 
-    }
-    stages {
 
-        
+    stages {        
         stage('Checkout') {
             steps {
                 checkout scm
