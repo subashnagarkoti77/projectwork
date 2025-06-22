@@ -5,7 +5,7 @@ pipeline {
         dockerImage = "subashn77/bookmanagement"
         COMPOSE_PROJECT_NAME = "bookmgmt"
     }
-        
+        stages {
         stage('Build Image') {
             steps {
                 echo "Building image using Docker Compose"
@@ -25,6 +25,7 @@ pipeline {
                     '''
                 }
             }
+        }
         }
      post {
         always {
