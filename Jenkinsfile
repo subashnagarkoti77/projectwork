@@ -8,7 +8,9 @@ pipeline {
         dockerImage = "subashn77/bookmanagement"
         COMPOSE_PROJECT_NAME = "bookmgmt"
     }
-
+  tools {
+        sonarQubeScanner 'sonar-scanner' 
+    }
     stages {
 
         
