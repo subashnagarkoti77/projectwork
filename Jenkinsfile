@@ -9,7 +9,7 @@ pipeline {
         COMPOSE_PROJECT_NAME = "bookmgmt"
     }
   tools {
-        sonarQubeScanner 'sonar-scanner' 
+        SonarRunnerInstallation 'sonar-scanner' 
     }
     stages {
 
