@@ -21,7 +21,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
-                    sh "docker push $dockerImage:$BUILD_NUMBER"
+                    sh "docker compose push $dockerImage:$BUILD_NUMBER"
                 }
             }
         }
