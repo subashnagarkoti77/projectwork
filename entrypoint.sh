@@ -3,7 +3,7 @@ set -e
 
 echo "Waiting for PostgreSQL..."
 
-while ! nc -z $DATABASE_HOST $DATABASE_PORT; do
+while ! nc -z db 5432 ; do
   echo "Postgres is unavailable - sleeping"
   sleep 1
 done

@@ -79,7 +79,7 @@ DATABASES = {
 	'NAME': os.getenv('DATABASE_NAME', 'book_management_db'),
         'USER': os.getenv('DATABASE_USER', 'subash'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'subash'),
-        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),
         'PORT': os.getenv('DATABASE_PORT', '5432'),   
 	}
 }
