@@ -57,7 +57,7 @@ pipeline {
                       -e SONAR_HOST_URL=$SONAR_HOST \
                       -e SONAR_LOGIN=$SONAR_TOKEN \
                       -v "$PWD:/usr/src" \
-                      sonarsource/sonar-scanner-cli \
+                      ghcr.io/silkeh/sonar-scanner \
                       -Dsonar.projectKey=${PROJECT_KEY} \
                       -Dsonar.sources=. \
                       -Dsonar.python.coverage.reportPaths=coverage.xml \
