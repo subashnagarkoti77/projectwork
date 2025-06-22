@@ -12,7 +12,7 @@ pipeline {
                 echo "Building image using Docker Compose"
                 sh '''
                 whoami
-                COMPOSE_BAKE=true ||
+                export COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
                 docker compose -f docker-compose.yml build    
                 docker tag ${COMPOSE_PROJECT_NAME}-web:latest $dockerImage:$BUILD_NUMBER
                 '''
@@ -21,7 +21,9 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry([credentialsId: 'dockerhubcredentials', url: '']) {
-                    sh "docker compose push $dockerImage:$BUILD_NUMBER"
+                    sh '''
+                    docker push $dockerImage:$BUILD_NUMBER
+                    '''
                 }
             }
         }
