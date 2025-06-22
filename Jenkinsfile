@@ -53,14 +53,11 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') { // Name configured in Jenkins -> SonarQube Servers
                     sh '''
-                      docker run --rm \
-                      --platform linux/amd64 \
-                      -e SONAR_HOST_URL=$SONAR_HOST \
-                      -e SONAR_LOGIN=$SONAR_TOKEN \
-                      -v "$PWD:/usr/src" \
-                      sonarsource/sonar-scanner-cli \
+                      sonar-scanner \
                       -Dsonar.projectKey=${PROJECT_KEY} \
                       -Dsonar.sources=. \
+                      -Dsonar.host.url=${SONAR_HOST} \
+                      -Dsonar.login=${SONAR_TOKEN} \
                       -Dsonar.python.coverage.reportPaths=coverage.xml \
                       -Dsonar.sourceEncoding=UTF-8
                     '''
